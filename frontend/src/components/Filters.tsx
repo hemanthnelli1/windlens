@@ -1,0 +1,3 @@
+export function Filters({ date, cutoff, onDate, onCutoff, onReset }: { date: string; cutoff: string; onDate: (value: string) => void; onCutoff: (value: string) => void; onReset: () => void }) {
+  return <div className="filters" aria-label="Forecast filters"><label>Delivery date<input aria-label="Delivery date" type="date" min="2026-01-01" max="2026-01-31" value={date} onChange={(event) => onDate(event.target.value)} /></label><label>Decision cutoff (browser local time)<input aria-label="Decision cutoff (browser local time)" type="datetime-local" value={cutoff} onChange={(event) => onCutoff(event.target.value)} /></label><button className="button secondary" onClick={onReset}>Use default cutoff</button></div>
+}

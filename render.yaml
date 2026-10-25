@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: windlens-api
+    runtime: docker
+    rootDir: backend
+    healthCheckPath: /api/health
+    envVars:
+      - key: BMRS_BASE_URL
+        value: https://data.elexon.co.uk/bmrs/api/v1
+      - key: CACHE_TTL_SECONDS
+        value: "21600"
+      - key: ALLOWED_ORIGINS
+        sync: false

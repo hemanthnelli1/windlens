@@ -1,0 +1,14 @@
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import type { Period } from '../types'
+import { dateTime, time } from '../lib/format'
+
+const tooltipStyle = { background: '#102431', border: '1px solid #345267', borderRadius: 8, color: '#e7f4f8' }
+const tooltipMw = (value: unknown) => typeof value === 'number' ? `${Math.round(value).toLocaleString('en-GB')} MW` : 'Missing'
+
+export function ActualForecastChart({ periods }: { periods: Period[] }) {
+  return <section className="chart-card"><div className="card-heading"><div><p className="eyebrow">Half-hourly delivery periods</p><h2>Actual versus selected forecast</h2></div><span className="unit-chip">MW</span></div><div className="chart"><ResponsiveContainer width="100%" height="100%"><LineChart data={periods}><CartesianGrid strokeDasharray="3 3" stroke="#203847" vertical={false} /><XAxis dataKey="start_time" tickFormatter={time} minTickGap={38} stroke="#89a1af" /><YAxis tickFormatter={(value: number) => `${Math.round(value / 1000)}k`} stroke="#89a1af" width={45} /><Tooltip contentStyle={tooltipStyle} labelFormatter={dateTime} formatter={(value, name) => [tooltipMw(value), name === 'actual_mw' ? 'Actual' : 'Forecast']} /><Legend formatter={(value) => value === 'actual_mw' ? 'Actual wind' : 'Selected forecast'} /><Line type="monotone" dataKey="actual_mw" stroke="#39d8c2" strokeWidth={2.5} dot={false} name="actual_mw" connectNulls={false} /><Line type="monotone" dataKey="forecast_mw" stroke="#73a8ff" strokeWidth={2.5} strokeDasharray="5 4" dot={false} name="forecast_mw" connectNulls={false} /></LineChart></ResponsiveContainer></div><p className="chart-note">Breaks in a line are source gaps; they are not imputed as zero.</p></section>
+}
+
+export function ErrorChart({ periods }: { periods: Period[] }) {
+  return <section className="chart-card"><div className="card-heading"><div><p className="eyebrow">Forecast quality</p><h2>Signed forecast error</h2></div><span className="unit-chip">forecast − actual</span></div><div className="chart"><ResponsiveContainer width="100%" height="100%"><LineChart data={periods}><CartesianGrid strokeDasharray="3 3" stroke="#203847" vertical={false} /><XAxis dataKey="start_time" tickFormatter={time} minTickGap={38} stroke="#89a1af" /><YAxis tickFormatter={(value: number) => `${Math.round(value / 1000)}k`} stroke="#89a1af" width={45} /><Tooltip contentStyle={tooltipStyle} labelFormatter={dateTime} formatter={(value) => [tooltipMw(value), 'Forecast error']} /><Line type="monotone" dataKey="error_mw" stroke="#f5b96b" strokeWidth={2.5} dot={false} name="error_mw" connectNulls={false} /></LineChart></ResponsiveContainer></div><p className="chart-note">Positive means the forecast overstated wind generation; negative means it understated it.</p></section>
+}
