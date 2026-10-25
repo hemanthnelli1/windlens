@@ -1,6 +1,7 @@
 import type { Metadata, Overview, Quality, VintagesResponse } from '../types'
 
-const baseUrl = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000').replace(/\/$/, '')
+const defaultBaseUrl = import.meta.env.DEV ? 'http://localhost:8000' : ''
+const baseUrl = (import.meta.env.VITE_API_BASE_URL ?? defaultBaseUrl).replace(/\/$/, '')
 
 async function request<T>(path: string): Promise<T> {
   const response = await fetch(`${baseUrl}${path}`)
